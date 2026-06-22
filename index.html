@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ultra Unleash Studio &mdash; Architecture, Interiors &amp; Visualization</title>
+<meta name="description" content="Ultra Unleash Studio &mdash; architectural design, interior design, 3D rendering, working drawings and landscape design by Rahul Sultane, Chhatrapati Sambhajinagar." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#0B0D0C;
+    --ink-soft:#141614;
+    --paper:#F4EFE6;
+    --paper-dim:#E8E1D2;
+    --brass:#9C8159;
+    --brass-bright:#C7A876;
+    --concrete:#8b8d89;
+    --hairline:rgba(244,239,230,0.16);
+    --hairline-strong:rgba(244,239,230,0.28);
+    --on-dark-dim:#9A9D98;
+    --ff-display:'Fraunces', serif;
+    --ff-body:'Inter', sans-serif;
+    --ff-mono:'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--ff-body);
+    font-weight:400;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  ::selection{ background:var(--brass); color:var(--ink); }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  img{ max-width:100%; display:block; }
+
+  :focus-visible{
+    outline:2px solid var(--brass-bright);
+    outline-offset:3px;
+  }
+
+  .mono{ font-family:var(--ff-mono); letter-spacing:0.04em; }
+  .eyebrow{
+    font-family:var(--ff-mono);
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--brass-bright);
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+  }
+  .eyebrow::before{
+    content:'';
+    width:18px; height:1px;
+    background:var(--brass-bright);
+    display:inline-block;
+  }
+
+  .wrap{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 6vw;
+  }
+
+  /* ============ BRAND MARK (U motif) ============ */
+  .u-mark{
+    display:inline-block;
+  }
+  .u-mark svg{ display:block; }
+
+  /* ============ LOADER ============ */
+  #loader{
+    position:fixed; inset:0;
+    background:var(--ink);
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:opacity 0.9s ease, visibility 0.9s ease;
+  }
+  #loader.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  .loader-mark{
+    font-family:var(--ff-display);
+    font-size:clamp(1.6rem, 5vw, 3rem);
+    letter-spacing:0.04em;
+    display:flex;
+    gap:0.05em;
+  }
+  .loader-u{
+    opacity:0;
+    transform:translateY(-10px);
+    animation:fadeIn 0.7s forwards ease 0.1s;
+    margin-bottom:1.1rem;
+  }
+  .loader-mark span{
+    opacity:0;
+    transform:translateY(14px);
+    animation:loaderLetter 0.6s forwards ease;
+  }
+  @keyframes loaderLetter{
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .loader-sub{
+    margin-top:0.9rem;
+    font-family:var(--ff-mono);
+    font-size:0.68rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--on-dark-dim);
+    opacity:0;
+    animation:fadeIn 0.6s forwards ease 1.1s;
+  }
+  .loader-bar{
+    margin-top:2rem;
+    width:200px; height:1px;
+    background:var(--hairline);
+    position:relative;
+    overflow:hidden;
+  }
+  .loader-bar::after{
+    content:'';
+    position:absolute; left:0; top:0; bottom:0;
+    width:40%;
+    background:var(--brass-bright);
+    animation:loaderSweep 1.3s ease-in-out infinite;
+  }
+  @keyframes loaderSweep{
+    0%{ left:-40%; }
+    100%{ left:100%; }
+  }
+  @keyframes fadeIn{ to{ opacity:1; } }
+
+  /* ============ NAV ============ */
+  header.site-nav{
+    position:fixed; top:0; left:0; right:0;
+    z-index:500;
+    padding:1.4rem 6vw;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:linear-gradient(to bottom, rgba(11,13,12,0.85), transparent);
+    backdrop-filter:blur(2px);
+    transition:padding 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.site-nav.scrolled{
+    padding:0.9rem 6vw;
+    background:rgba(11,13,12,0.86);
+    border-bottom:1px solid var(--hairline);
+    backdrop-filter:blur(10px);
+  }
+  .brand{
+    font-family:var(--ff-display);
+    font-size:1.05rem;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    line-height:1;
+  }
+  .brand .u-mark svg{ width:22px; height:18px; }
+  .brand .brand-text{
+    display:flex;
+    flex-direction:column;
+  }
+  .brand b{ font-weight:500; }
+  .brand small{
+    font-family:var(--ff-mono);
+    font-size:0.55rem;
+    letter-spacing:0.22em;
+    color:var(--brass-bright);
+    text-transform:uppercase;
+    margin-top:0.35rem;
+  }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:2.4rem;
+  }
+  .nav-links a{
+    font-size:0.82rem;
+    letter-spacing:0.03em;
+    color:var(--paper-dim);
+    position:relative;
+    padding-bottom:4px;
+    transition:color 0.3s ease;
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute; left:0; bottom:0;
+    width:0; height:1px;
+    background:var(--brass-bright);
+    transition:width 0.3s ease;
+  }
+  .nav-links a:hover{ color:var(--paper); }
+  .nav-links a:hover::after{ width:100%; }
+  .nav-cta{
+    font-family:var(--ff-mono);
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:0.6rem 1.2rem;
+    border:1px solid var(--hairline-strong);
+    transition:border-color 0.3s ease, background 0.3s ease;
+  }
+  .nav-cta:hover{ border-color:var(--brass-bright); background:rgba(156,129,89,0.1); }
+
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    gap:5px;
+    background:none; border:none; cursor:pointer;
+    padding:0.4rem;
+  }
+  .nav-toggle span{
+    width:22px; height:1px; background:var(--paper);
+    transition:transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    overflow:hidden;
+    border-bottom:1px solid var(--hairline);
+  }
+  .hero-canvas{
+    position:absolute; inset:0;
+    z-index:0;
+    background:var(--ink);
+  }
+  .hero-canvas video{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+    filter:saturate(0.85) brightness(0.8);
+  }
+  .hero-veil{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(to top, rgba(11,13,12,0.97) 0%, rgba(11,13,12,0.35) 38%, rgba(11,13,12,0.55) 70%, rgba(11,13,12,0.8) 100%);
+    z-index:1;
+  }
+
+  .hero-content{
+    position:relative; z-index:2;
+    padding:0 6vw 0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    flex:1;
+    padding-top:8rem;
+  }
+  .hero-eyebrow{
+    opacity:0;
+    animation:riseIn 0.9s forwards ease 0.3s;
+  }
+  .hero h1{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:clamp(2.2rem, 6.4vw, 5.4rem);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    max-width:16ch;
+    margin-top:1.4rem;
+    opacity:0;
+    animation:riseIn 1s forwards ease 0.5s;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--brass-bright);
+    font-weight:400;
+  }
+  .hero-tagline{
+    margin-top:1.6rem;
+    max-width:46ch;
+    font-size:clamp(0.95rem, 1.4vw, 1.15rem);
+    color:var(--paper-dim);
+    line-height:1.6;
+    font-weight:300;
+    opacity:0;
+    animation:riseIn 1s forwards ease 0.75s;
+  }
+  .hero-actions{
+    margin-top:2.4rem;
+    display:flex;
+    align-items:center;
+    gap:1.6rem;
+    flex-wrap:wrap;
+    opacity:0;
+    animation:riseIn 1s forwards ease 0.95s;
+  }
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .btn-primary{
+    font-family:var(--ff-mono);
+    font-size:0.74rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    background:var(--paper);
+    color:var(--ink);
+    padding:0.95rem 1.8rem;
+    display:inline-flex;
+    align-items:center;
+    gap:0.6rem;
+    transition:background 0.3s ease, transform 0.3s ease, letter-spacing 0.3s ease;
+  }
+  .btn-primary:hover{ background:var(--brass-bright); transform:translateY(-2px); }
+  .btn-ghost{
+    font-family:var(--ff-mono);
+    font-size:0.74rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--paper-dim);
+    border-bottom:1px solid var(--hairline-strong);
+    padding-bottom:0.3rem;
+    transition:color 0.3s ease, border-color 0.3s ease;
+  }
+  .btn-ghost:hover{ color:var(--brass-bright); border-color:var(--brass-bright); }
+
+  /* Title block &mdash; drafting sheet convention */
+  .title-block{
+    position:relative; z-index:2;
+    border-top:1px solid var(--hairline);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+  }
+  .title-block .cell{
+    padding:1rem 1.5rem;
+    border-left:1px solid var(--hairline);
+    font-family:var(--ff-mono);
+    font-size:0.66rem;
+    letter-spacing:0.06em;
+    color:var(--on-dark-dim);
+  }
+  .title-block .cell:first-child{ border-left:none; }
+  .title-block .cell b{
+    display:block;
+    color:var(--paper-dim);
+    font-size:0.78rem;
+    margin-bottom:0.2rem;
+    font-weight:500;
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:6.2rem; right:6vw;
+    z-index:2;
+    writing-mode:vertical-rl;
+    font-family:var(--ff-mono);
+    font-size:0.65rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--on-dark-dim);
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+  }
+  .scroll-cue::after{
+    content:'';
+    width:1px; height:38px;
+    background:var(--hairline-strong);
+    animation:scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse{
+    0%,100%{ transform:scaleY(0.4); opacity:0.4; }
+    50%{ transform:scaleY(1); opacity:1; }
+  }
+
+  /* ============ SECTION COMMON ============ */
+  section{
+    position:relative;
+    padding:7.5rem 0;
+    border-bottom:1px solid var(--hairline);
+  }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:2rem;
+    margin-bottom:3.6rem;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:clamp(1.9rem, 3.6vw, 3rem);
+    margin-top:0.9rem;
+    max-width:14ch;
+  }
+  .section-head p{
+    max-width:32ch;
+    color:var(--on-dark-dim);
+    font-size:0.92rem;
+    line-height:1.6;
+    font-weight:300;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ============ SERVICE CARDS (Home quick preview) ============ */
+  .quick-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--hairline);
+    border:1px solid var(--hairline);
+  }
+  .quick-card{
+    background:var(--ink);
+    padding:2.2rem 1.8rem;
+    transition:background 0.4s ease;
+    position:relative;
+  }
+  .quick-card:hover{ background:#121412; }
+  .quick-card .qc-num{
+    font-family:var(--ff-mono);
+    font-size:0.7rem;
+    color:var(--brass-bright);
+  }
+  .quick-card h3{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:1.25rem;
+    margin-top:1.4rem;
+  }
+  .quick-card p{
+    margin-top:0.7rem;
+    font-size:0.84rem;
+    color:var(--on-dark-dim);
+    line-height:1.55;
+    font-weight:300;
+  }
+
+  /* ============ FEATURED PROJECTS (Home) ============ */
+  .feature-strip{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    gap:1.5rem;
+    margin-top:3.6rem;
+  }
+  .feature-strip .proj-card:first-child{ grid-row:span 2; }
+
+  .proj-card{
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--hairline);
+    aspect-ratio:4/5;
+    cursor:pointer;
+  }
+  .feature-strip .proj-card:first-child{ aspect-ratio:auto; }
+  .proj-card img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform 0.8s cubic-bezier(.2,.8,.2,1), filter 0.8s ease;
+    filter:grayscale(35%) brightness(0.78);
+  }
+  .proj-card:hover img{ transform:scale(1.06); filter:grayscale(0%) brightness(0.9); }
+  .proj-overlay{
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(11,13,12,0.92) 0%, rgba(11,13,12,0.1) 55%, transparent 100%);
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:1.6rem;
+  }
+  .proj-tag{
+    font-family:var(--ff-mono);
+    font-size:0.62rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--brass-bright);
+  }
+  .proj-card h4{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:1.3rem;
+    margin-top:0.5rem;
+  }
+  .proj-card .proj-loc{
+    font-family:var(--ff-mono);
+    font-size:0.68rem;
+    color:var(--on-dark-dim);
+    margin-top:0.35rem;
+  }
+  .corner-mark{
+    position:absolute; width:14px; height:14px;
+    border:1px solid var(--brass-bright);
+    opacity:0; transition:opacity 0.4s ease;
+  }
+  .proj-card:hover .corner-mark{ opacity:1; }
+  .corner-mark.tl{ top:10px; left:10px; border-right:none; border-bottom:none; }
+  .corner-mark.br{ bottom:10px; right:10px; border-left:none; border-top:none; }
+
+  /* ============ ABOUT ============ */
+  .about-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:5vw;
+    align-items:start;
+  }
+  .about-lead{
+    font-family:var(--ff-display);
+    font-size:clamp(1.3rem, 2.4vw, 1.9rem);
+    font-weight:400;
+    line-height:1.45;
+    color:var(--paper);
+  }
+  .about-lead em{ font-style:italic; color:var(--brass-bright); }
+  .about-body p{
+    color:var(--paper-dim);
+    font-size:0.96rem;
+    line-height:1.75;
+    font-weight:300;
+    margin-bottom:1.3rem;
+  }
+
+  .founder-card{
+    margin-top:3rem;
+    border:1px solid var(--hairline);
+    padding:2.2rem;
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:1.8rem;
+    align-items:center;
+  }
+  .founder-photo{
+    width:120px; height:120px;
+    border:1px solid var(--hairline-strong);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--ff-display);
+    font-size:2.2rem;
+    color:var(--brass-bright);
+    background:#101210;
+  }
+  .founder-card h3{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:1.4rem;
+  }
+  .founder-card .role{
+    font-family:var(--ff-mono);
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    color:var(--brass-bright);
+    text-transform:uppercase;
+    margin-top:0.4rem;
+  }
+  .founder-card p{
+    margin-top:0.8rem;
+    font-size:0.86rem;
+    color:var(--on-dark-dim);
+    line-height:1.6;
+    font-weight:300;
+  }
+
+  .expertise-list{
+    margin-top:3rem;
+    display:flex;
+    flex-direction:column;
+  }
+  .expertise-row{
+    display:grid;
+    grid-template-columns:60px 1fr auto;
+    align-items:center;
+    gap:1.5rem;
+    padding:1.3rem 0;
+    border-top:1px solid var(--hairline);
+  }
+  .expertise-row:last-child{ border-bottom:1px solid var(--hairline); }
+  .expertise-row .ex-num{ font-family:var(--ff-mono); font-size:0.75rem; color:var(--brass-bright); }
+  .expertise-row h4{ font-family:var(--ff-display); font-weight:400; font-size:1.15rem; }
+  .expertise-row .ex-bar{
+    width:140px; height:2px; background:var(--hairline-strong);
+    position:relative;
+  }
+  .expertise-row .ex-bar i{
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--brass-bright);
+    width:var(--w, 80%);
+  }
+
+  .philosophy-quote{
+    margin-top:5rem;
+    border-left:2px solid var(--brass-bright);
+    padding-left:2rem;
+  }
+  .philosophy-quote p{
+    font-family:var(--ff-display);
+    font-style:italic;
+    font-size:clamp(1.2rem, 2.2vw, 1.7rem);
+    line-height:1.5;
+    color:var(--paper-dim);
+  }
+
+  /* ============ SERVICES ============ */
+  .services-list{ border-top:1px solid var(--hairline); }
+  .service-row{
+    border-bottom:1px solid var(--hairline);
+    padding:2.6rem 0;
+    display:grid;
+    grid-template-columns:80px 1.1fr 1.4fr 160px;
+    align-items:center;
+    gap:2rem;
+    transition:padding-left 0.4s ease, background 0.4s ease;
+    cursor:default;
+  }
+  .service-row:hover{ padding-left:1.2rem; background:rgba(156,129,89,0.04); }
+  .service-row .sv-num{ font-family:var(--ff-mono); font-size:0.85rem; color:var(--brass-bright); }
+  .service-row h3{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:clamp(1.3rem, 2.2vw, 1.8rem);
+  }
+  .service-row p{
+    font-size:0.87rem;
+    color:var(--on-dark-dim);
+    line-height:1.6;
+    font-weight:300;
+  }
+  .service-row .sv-tags{
+    display:flex; flex-wrap:wrap; gap:0.4rem;
+    justify-content:flex-end;
+  }
+  .service-row .sv-tags span{
+    font-family:var(--ff-mono);
+    font-size:0.6rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--on-dark-dim);
+    border:1px solid var(--hairline-strong);
+    padding:0.3rem 0.6rem;
+  }
+
+  /* ============ PROJECTS PAGE ============ */
+  .filter-bar{
+    display:flex;
+    gap:0.6rem;
+    flex-wrap:wrap;
+    margin-bottom:3rem;
+  }
+  .filter-btn{
+    font-family:var(--ff-mono);
+    font-size:0.7rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:0.65rem 1.1rem;
+    border:1px solid var(--hairline-strong);
+    color:var(--on-dark-dim);
+    background:none;
+    cursor:pointer;
+    transition:all 0.3s ease;
+  }
+  .filter-btn:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  .filter-btn.active{ background:var(--brass-bright); color:var(--ink); border-color:var(--brass-bright); }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1.4rem;
+  }
+  .gallery-grid .proj-card{ aspect-ratio:3/4; }
+  .gallery-item{ transition:opacity 0.4s ease, transform 0.4s ease; }
+  .gallery-item.hide{ display:none; }
+
+  /* Before / After */
+  .ba-wrap{
+    margin-top:5rem;
+  }
+  .ba-slider{
+    position:relative;
+    aspect-ratio:16/9;
+    overflow:hidden;
+    border:1px solid var(--hairline);
+    cursor:ew-resize;
+    user-select:none;
+  }
+  .ba-slider img{
+    position:absolute; inset:0;
+    width:100%; height:100%; object-fit:cover;
+  }
+  .ba-after{ position:absolute; inset:0; overflow:hidden; width:50%; }
+  .ba-after img{ width:var(--bw, 200%); max-width:none; height:100%; }
+  .ba-handle{
+    position:absolute; top:0; bottom:0; left:50%;
+    width:1px; background:var(--brass-bright);
+    transform:translateX(-50%);
+  }
+  .ba-handle::after{
+    content:'&#8644;';
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:42px; height:42px;
+    background:var(--brass-bright);
+    color:var(--ink);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem;
+  }
+  .ba-label{
+    position:absolute; top:1rem;
+    font-family:var(--ff-mono);
+    font-size:0.65rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    background:rgba(11,13,12,0.7);
+    padding:0.4rem 0.8rem;
+    z-index:3;
+  }
+  .ba-label.left{ left:1rem; }
+  .ba-label.right{ right:1rem; }
+
+  /* ============ CONTACT ============ */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:5vw;
+  }
+  .contact-info .info-row{
+    display:flex; gap:1.2rem;
+    padding:1.4rem 0;
+    border-top:1px solid var(--hairline);
+    align-items:flex-start;
+  }
+  .contact-info .info-row:last-of-type{ border-bottom:1px solid var(--hairline); }
+  .info-row .ic{
+    font-family:var(--ff-mono);
+    font-size:0.68rem;
+    color:var(--brass-bright);
+    width:90px;
+    flex-shrink:0;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    padding-top:0.2rem;
+  }
+  .info-row .val{
+    font-size:1.02rem;
+    color:var(--paper);
+    font-weight:300;
+  }
+  .info-row .val a:hover{ color:var(--brass-bright); }
+
+  .social-row{
+    display:flex; gap:1.4rem;
+    margin-top:2.2rem;
+  }
+  .social-row a{
+    font-family:var(--ff-mono);
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--on-dark-dim);
+    border-bottom:1px solid transparent;
+    padding-bottom:3px;
+    transition:color 0.3s ease, border-color 0.3s ease;
+  }
+  .social-row a:hover{ color:var(--brass-bright); border-color:var(--brass-bright); }
+
+  .map-embed{
+    margin-top:2.2rem;
+    border:1px solid var(--hairline);
+    filter:grayscale(80%) invert(92%) contrast(85%);
+    height:220px;
+  }
+  .map-embed iframe{ width:100%; height:100%; border:0; display:block; }
+
+  /* Glassmorphism form card */
+  .form-card{
+    background:rgba(244,239,230,0.04);
+    border:1px solid var(--hairline-strong);
+    backdrop-filter:blur(14px);
+    padding:2.6rem;
+    position:relative;
+  }
+  .form-card::before{
+    content:'';
+    position:absolute; top:-1px; left:-1px;
+    width:22px; height:22px;
+    border-top:1px solid var(--brass-bright);
+    border-left:1px solid var(--brass-bright);
+  }
+  .form-card::after{
+    content:'';
+    position:absolute; bottom:-1px; right:-1px;
+    width:22px; height:22px;
+    border-bottom:1px solid var(--brass-bright);
+    border-right:1px solid var(--brass-bright);
+  }
+  .form-row{ margin-bottom:1.5rem; }
+  .form-row label{
+    display:block;
+    font-family:var(--ff-mono);
+    font-size:0.65rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--on-dark-dim);
+    margin-bottom:0.6rem;
+  }
+  .form-row input, .form-row textarea, .form-row select{
+    width:100%;
+    background:rgba(0,0,0,0.2);
+    border:1px solid var(--hairline-strong);
+    color:var(--paper);
+    font-family:var(--ff-body);
+    font-size:0.92rem;
+    padding:0.85rem 1rem;
+    transition:border-color 0.3s ease, background 0.3s ease;
+  }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus{
+    border-color:var(--brass-bright);
+    background:rgba(0,0,0,0.32);
+    outline:none;
+  }
+  .form-row textarea{ resize:vertical; min-height:120px; }
+  .form-submit{
+    width:100%;
+    font-family:var(--ff-mono);
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    background:var(--paper);
+    color:var(--ink);
+    padding:1rem;
+    border:none;
+    cursor:pointer;
+    transition:background 0.3s ease;
+  }
+  .form-submit:hover{ background:var(--brass-bright); }
+  .form-note{
+    margin-top:1rem;
+    font-size:0.74rem;
+    color:var(--on-dark-dim);
+    text-align:center;
+    min-height:1em;
+  }
+
+  /* WhatsApp floating button */
+  .whatsapp-fab{
+    position:fixed;
+    bottom:5.5rem; right:1.8rem;
+    z-index:400;
+    width:56px; height:56px;
+    border-radius:50%;
+    background:#1f2b22;
+    border:1px solid var(--brass-bright);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 30px rgba(0,0,0,0.5);
+    transition:transform 0.3s ease;
+  }
+  .whatsapp-fab:hover{ transform:scale(1.08); }
+  .whatsapp-fab svg{ width:26px; height:26px; }
+
+  /* Call floating button */
+  .call-fab{
+    position:fixed;
+    bottom:1.8rem; right:1.8rem;
+    z-index:400;
+    width:56px; height:56px;
+    border-radius:50%;
+    background:rgba(11,13,12,0.92);
+    border:1px solid var(--brass-bright);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 30px rgba(0,0,0,0.5);
+    transition:transform 0.3s ease;
+  }
+  .call-fab:hover{ transform:scale(1.08); }
+  .call-fab svg{ width:22px; height:22px; color:var(--brass-bright); }
+
+  /* Social connect cards */
+  .social-btn-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:0.8rem;
+    margin-top:1.6rem;
+  }
+  .social-btn-card{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    padding:1rem 1.2rem;
+    border:1px solid var(--hairline-strong);
+    background:rgba(244,239,230,0.03);
+    transition:border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  }
+  .social-btn-card:hover{
+    border-color:var(--brass-bright);
+    background:rgba(156,129,89,0.08);
+    transform:translateY(-2px);
+  }
+  .sbc-icon{
+    width:40px; height:40px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .sbc-icon svg{ width:20px; height:20px; }
+  .call-icon{ background:rgba(199,168,118,0.15); color:var(--brass-bright); }
+  .wa-icon{ background:rgba(37,211,102,0.12); color:#25D366; }
+  .ig-icon{ background:rgba(225,48,108,0.12); color:#E1306C; }
+  .li-icon{ background:rgba(10,102,194,0.12); color:#0A66C2; }
+  .sbc-info{ flex:1; min-width:0; }
+  .sbc-label{
+    display:block;
+    font-family:var(--ff-mono);
+    font-size:0.62rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--on-dark-dim);
+  }
+  .sbc-handle{
+    display:block;
+    font-size:0.86rem;
+    color:var(--paper);
+    font-weight:400;
+    margin-top:0.15rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .sbc-action{
+    font-family:var(--ff-mono);
+    font-size:0.62rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--brass-bright);
+    border:1px solid var(--hairline-strong);
+    padding:0.32rem 0.65rem;
+    white-space:nowrap;
+    flex-shrink:0;
+    transition:background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+  .social-btn-card:hover .sbc-action{
+    background:var(--brass-bright);
+    color:var(--ink);
+    border-color:var(--brass-bright);
+  }
+  @media (max-width:980px){
+    .social-btn-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    padding:4rem 0 2rem;
+  }
+  .footer-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:2.5rem;
+    padding-bottom:3rem;
+    border-bottom:1px solid var(--hairline);
+  }
+  .footer-brand .brand{ margin-bottom:1rem; }
+  .footer-brand p{
+    max-width:32ch;
+    font-size:0.85rem;
+    color:var(--on-dark-dim);
+    line-height:1.6;
+    font-weight:300;
+  }
+  .footer-cols{ display:flex; gap:5vw; flex-wrap:wrap; }
+  .footer-col h5{
+    font-family:var(--ff-mono);
+    font-size:0.66rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--brass-bright);
+    margin-bottom:1rem;
+  }
+  .footer-col a, .footer-col span{
+    display:block;
+    font-size:0.85rem;
+    color:var(--paper-dim);
+    padding:0.35rem 0;
+    transition:color 0.3s ease;
+  }
+  .footer-col a:hover{ color:var(--brass-bright); }
+  .footer-bottom{
+    display:flex; justify-content:space-between;
+    padding-top:1.8rem;
+    font-family:var(--ff-mono);
+    font-size:0.66rem;
+    color:var(--on-dark-dim);
+    letter-spacing:0.04em;
+    flex-wrap:wrap; gap:0.8rem;
+  }
+
+  /* ============ PAGE SWITCH SYSTEM ============ */
+  .page{ display:none; }
+  .page.active{ display:block; }
+  .page-hero-strip{
+    padding:9.5rem 0 3.5rem;
+    border-bottom:1px solid var(--hairline);
+  }
+  .page-hero-strip h1{
+    font-family:var(--ff-display);
+    font-weight:400;
+    font-size:clamp(2.2rem, 5vw, 4rem);
+    margin-top:1rem;
+  }
+  .page-hero-strip p{
+    margin-top:1.2rem;
+    max-width:46ch;
+    color:var(--on-dark-dim);
+    font-size:0.95rem;
+    line-height:1.65;
+    font-weight:300;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px){
+    .quick-grid{ grid-template-columns:repeat(2,1fr); }
+    .feature-strip{ grid-template-columns:1fr 1fr; }
+    .feature-strip .proj-card:first-child{ grid-column:span 2; aspect-ratio:16/9; }
+    .about-grid, .contact-grid{ grid-template-columns:1fr; }
+    .gallery-grid{ grid-template-columns:repeat(2, 1fr); }
+    .service-row{ grid-template-columns:50px 1fr; }
+    .service-row .sv-tags{ grid-column:1/-1; justify-content:flex-start; margin-top:0.6rem; }
+    .title-block{ grid-template-columns:repeat(2,1fr); }
+    .title-block .cell:nth-child(2){ border-left:1px solid var(--hairline); }
+    .title-block .cell:nth-child(3){ border-left:none; border-top:1px solid var(--hairline); }
+    .title-block .cell:nth-child(4){ border-top:1px solid var(--hairline); }
+  }
+
+  @media (max-width: 720px){
+    .nav-links{
+      position:fixed; top:0; right:0; height:100svh; width:78%;
+      background:var(--ink);
+      border-left:1px solid var(--hairline);
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-start;
+      padding:2rem 2.4rem;
+      transform:translateX(100%);
+      transition:transform 0.45s cubic-bezier(.2,.8,.2,1);
+      gap:1.8rem;
+      z-index:600;
+    }
+    .nav-links.open{ transform:translateX(0); }
+    .nav-links a{ font-size:1.1rem; }
+    .nav-toggle{ display:flex; z-index:601; }
+    .nav-toggle.open span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2){ opacity:0; }
+    .nav-toggle.open span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+    .nav-cta{ display:none; }
+
+    .quick-grid{ grid-template-columns:1fr; }
+    .feature-strip{ grid-template-columns:1fr; }
+    .feature-strip .proj-card:first-child{ grid-column:span 1; aspect-ratio:4/5; }
+    .gallery-grid{ grid-template-columns:1fr; }
+    .founder-card{ grid-template-columns:1fr; text-align:left; }
+    .founder-photo{ width:90px; height:90px; }
+    .expertise-row{ grid-template-columns:40px 1fr; }
+    .expertise-row .ex-bar{ display:none; }
+    .scroll-cue{ display:none; }
+    section{ padding:5rem 0; }
+    .form-card{ padding:1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div id="loader">
+  <div class="loader-u">
+    <svg width="56" height="44" viewBox="0 0 56 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 2V22C6 32 13 40 22 40" stroke="#C7A876" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M16 2V20C16 28 21 34 28 34" stroke="#C7A876" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M50 2V22C50 32 43 40 34 40" stroke="#C7A876" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M40 2V20C40 28 35 34 28 34" stroke="#C7A876" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="loader-mark" id="loaderMark"></div>
+  <div class="loader-sub">Architecture &middot; Interiors &middot; Visualization</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- ============ WHATSAPP FAB ============ -->
+<a href="https://wa.me/917276101571?text=Hi%20Rahul%2C%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="none"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-1.9c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3z" fill="#25D366"/><path d="M22.4 18.8c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.1-.2.3-.8 1.1-1 1.3-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.5-1.6-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.9-.8 2.1-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.4z" fill="#fff"/></svg>
+</a>
+
+<!-- ============ CALL FAB ============ -->
+<a href="tel:+917276101571" class="call-fab" aria-label="Call Rahul Sultane">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C9.6 21 3 14.4 3 6c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</a>
+
+<!-- ============ NAV ============ -->
+<header class="site-nav" id="siteNav">
+  <a href="#" class="brand" data-nav="home">
+    <span class="u-mark"><svg width="22" height="18" viewBox="0 0 56 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 2V22C6 32 13 40 22 40" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/><path d="M16 2V20C16 28 21 34 28 34" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/><path d="M50 2V22C50 32 43 40 34 40" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/><path d="M40 2V20C40 28 35 34 28 34" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/></svg></span>
+    <span class="brand-text"><b>ULTRA UNLEASH</b><small>Studio</small></span>
+  </a>
+  <nav class="nav-links" id="navLinks">
+    <a href="#" data-nav="home">Home</a>
+    <a href="#" data-nav="about">About</a>
+    <a href="#" data-nav="services">Services</a>
+    <a href="#" data-nav="projects">Projects</a>
+    <a href="#" data-nav="contact">Contact</a>
+    <a href="#" data-nav="contact" class="nav-cta">Start a Project</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ============================================================ -->
+<!-- ============ HOME PAGE ============ -->
+<!-- ============================================================ -->
+<div class="page active" id="page-home">
+
+  <section class="hero" style="border-bottom:none; padding:0;">
+    <div class="hero-canvas">
+      <video autoplay muted loop playsinline poster="assets/ananya-night-01.jpg">
+        <source src="assets/studio-reel.mp4" type="video/mp4">
+        <img src="assets/ananya-night-01.jpg" alt="Ultra Unleash Studio architectural visualization reel">
+      </video>
+    </div>
+    <div class="hero-veil"></div>
+
+    <div class="hero-content">
+      <div class="eyebrow hero-eyebrow">Ultra Unleash Studio &mdash; Est. Chhatrapati Sambhajinagar</div>
+      <h1>Engineering form. <br><em>Designing</em> feeling.</h1>
+      <p class="hero-tagline">Transforming ideas into timeless spaces through innovative architecture and realistic visualization.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary" data-nav="projects">View Projects &rarr;</a>
+        <a href="#" class="btn-ghost" data-nav="contact">Book a Consultation</a>
+      </div>
+    </div>
+
+    <div class="scroll-cue">Scroll</div>
+
+  </section>
+
+  <!-- QUICK SERVICE CARDS -->
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">What We Do</div>
+          <h2>One studio, the full drawing set.</h2>
+        </div>
+        <p>From the first structural line to the final rendered frame &mdash; design, engineering and visualization under one roof.</p>
+      </div>
+
+      <div class="quick-grid reveal">
+        <div class="quick-card">
+          <div class="qc-num">01</div>
+          <h3>Architectural Design</h3>
+          <p>Concept to construction-ready form, rooted in structural sense.</p>
+        </div>
+        <div class="quick-card">
+          <div class="qc-num">02</div>
+          <h3>Interior Design</h3>
+          <p>Material, light and layout tuned to how a space is actually lived in.</p>
+        </div>
+        <div class="quick-card">
+          <div class="qc-num">03</div>
+          <h3>3D Rendering</h3>
+          <p>Photoreal visualization that lets you stand inside a space before it exists.</p>
+        </div>
+        <div class="quick-card">
+          <div class="qc-num">04</div>
+          <h3>Working Drawings</h3>
+          <p>Precise, contractor-ready documentation &mdash; civil engineering rigor on every sheet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECTS -->
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">Selected Work</div>
+          <h2>Featured projects.</h2>
+        </div>
+        <a href="#" class="btn-ghost" data-nav="projects">View Full Portfolio &rarr;</a>
+      </div>
+
+      <div class="feature-strip reveal">
+        <div class="proj-card" data-nav="projects">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/ananya-night-01.jpg" alt="Ananya Beauty Parlour mixed-use building, night exterior render" loading="lazy">
+          <div class="proj-overlay">
+            <div class="proj-tag">Commercial &middot; Residential</div>
+            <h4>Ananya Beauty Parlour</h4>
+            <div class="proj-loc">Sambhajinagar, MH</div>
+          </div>
+        </div>
+        <div class="proj-card" data-nav="projects">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/maronis-night-01.jpg" alt="Maroni's House villa, night exterior render" loading="lazy">
+          <div class="proj-overlay">
+            <div class="proj-tag">Residential</div>
+            <h4>Maroni's House</h4>
+            <div class="proj-loc">Sambhajinagar, MH</div>
+          </div>
+        </div>
+        <div class="proj-card" data-nav="projects">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/interior-bedroom.jpg" alt="Warm minimal bedroom interior design render" loading="lazy">
+          <div class="proj-overlay">
+            <div class="proj-tag">Interior</div>
+            <h4>Stone Bedroom Suite</h4>
+            <div class="proj-loc">Sambhajinagar, MH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- ============ ABOUT PAGE ============ -->
+<!-- ============================================================ -->
+<div class="page" id="page-about">
+  <section class="page-hero-strip">
+    <div class="wrap">
+      <div class="eyebrow">About the Studio</div>
+      <h1>Built on drawings that <em style="color:var(--brass-bright); font-style:italic;">hold weight</em> &mdash; literally and visually.</h1>
+      <p>Ultra Unleash Studio is a boutique design practice working across architecture, interiors and visualization &mdash; where every concept is tested against structure before it's ever rendered.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="about-grid">
+        <div>
+          <p class="about-lead reveal">We don't separate the <em>idea</em> from the <em>structure</em> that holds it up.</p>
+
+          <div class="founder-card reveal">
+            <div class="founder-photo">RS</div>
+            <div>
+              <h3>Rahul Sultane</h3>
+              <div class="role">Founder &amp; Principal</div>
+              <p>Civil engineer turned architectural designer, Rahul founded Ultra Unleash Studio to close the gap between structural drawings and the spaces people actually feel. Based in Chhatrapati Sambhajinagar, his work spans residential, commercial and interior projects across Maharashtra.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-body reveal">
+          <p>Ultra Unleash Studio began with a simple frustration: too many beautiful renders never survive contact with a structural drawing, and too many sound structures never get drawn beautifully. We exist in the middle of that &mdash; where civil engineering discipline meets the eye of an interior designer and the patience of a visualizer.</p>
+          <p>Every project on our boards passes through the same three lenses. First, does it stand &mdash; structurally, financially, practically? Second, does it feel right to move through &mdash; light, material, proportion? Third, can a client see it clearly before a single brick is laid?</p>
+          <p>That three-part process is why clients come to us for everything from a single working-drawing set to a full residence designed, rendered and detailed from the ground up.</p>
+
+          <div class="expertise-list">
+            <div class="expertise-row">
+              <span class="ex-num">01</span>
+              <h4>Civil Engineering</h4>
+              <div class="ex-bar" style="--w:92%"><i></i></div>
+            </div>
+            <div class="expertise-row">
+              <span class="ex-num">02</span>
+              <h4>Interior Design</h4>
+              <div class="ex-bar" style="--w:85%"><i></i></div>
+            </div>
+            <div class="expertise-row">
+              <span class="ex-num">03</span>
+              <h4>3D Visualization</h4>
+              <div class="ex-bar" style="--w:90%"><i></i></div>
+            </div>
+          </div>
+
+          <div class="philosophy-quote">
+            <p>"Good design is a drawing that tells the truth twice &mdash; once to the engineer, once to the eye."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-bottom:none;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">Process</div>
+          <h2>Every project starts on the materials table.</h2>
+        </div>
+        <p>Stone, glass, concrete, timber and terracotta jali &mdash; the same finish language that shows up across the rendered facades and interiors.</p>
+      </div>
+      <div class="reveal" style="border:1px solid var(--hairline); overflow:hidden;">
+        <img src="assets/villa-pink-day-01.jpg" alt="Residential villa render showing facade materials, balcony details and landscape edge" loading="lazy" style="width:100%; display:block; filter:saturate(0.92);">
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================ -->
+<!-- ============ SERVICES PAGE ============ -->
+<!-- ============================================================ -->
+<div class="page" id="page-services">
+  <section class="page-hero-strip">
+    <div class="wrap">
+      <div class="eyebrow">Services</div>
+      <h1>The full set, sheet by sheet.</h1>
+      <p>Engage us for a single drawing or the entire journey from concept to handover &mdash; each service stands on its own, and compounds when combined.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="services-list">
+        <div class="service-row reveal">
+          <div class="sv-num">01</div>
+          <h3>Architectural Design</h3>
+          <p>Concept design, massing and planning that balances site, structure, budget and client brief into a buildable form.</p>
+          <div class="sv-tags"><span>Concept</span><span>Planning</span><span>Elevation</span></div>
+        </div>
+        <div class="service-row reveal">
+          <div class="sv-num">02</div>
+          <h3>Interior Design</h3>
+          <p>Space planning, material palettes and lighting design tailored to how each room is actually used and lived in.</p>
+          <div class="sv-tags"><span>Layout</span><span>Material</span><span>Lighting</span></div>
+        </div>
+        <div class="service-row reveal">
+          <div class="sv-num">03</div>
+          <h3>3D Rendering</h3>
+          <p>Photoreal interior and exterior visualizations that let clients walk through a space before construction begins.</p>
+          <div class="sv-tags"><span>Interior</span><span>Exterior</span><span>Walkthrough</span></div>
+        </div>
+        <div class="service-row reveal">
+          <div class="sv-num">04</div>
+          <h3>Working Drawings</h3>
+          <p>Detailed, dimensioned and contractor-ready drawing sets &mdash; structural, electrical, plumbing and finish schedules included.</p>
+          <div class="sv-tags"><span>Structural</span><span>MEP</span><span>Detailing</span></div>
+        </div>
+        <div class="service-row reveal">
+          <div class="sv-num">05</div>
+          <h3>Landscape Design</h3>
+          <p>Outdoor and site-level design that extends architectural language into gardens, courtyards and approach spaces.</p>
+          <div class="sv-tags"><span>Site Plan</span><span>Planting</span><span>Hardscape</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================ -->
+<!-- ============ PROJECTS PAGE ============ -->
+<!-- ============================================================ -->
+<div class="page" id="page-projects">
+  <section class="page-hero-strip">
+    <div class="wrap">
+      <div class="eyebrow">Portfolio</div>
+      <h1>Projects, drawn and built.</h1>
+      <p>A working record across residential, commercial, interior and visualization work &mdash; filter by category to browse.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="residential">Residential</button>
+        <button class="filter-btn" data-filter="commercial">Commercial</button>
+        <button class="filter-btn" data-filter="interior">Interior</button>
+        <button class="filter-btn" data-filter="visualization">3D Visualization</button>
+      </div>
+
+      <div class="gallery-grid reveal" id="galleryGrid">
+        <div class="gallery-item proj-card" data-cat="commercial">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/ananya-night-01.jpg" alt="Ananya Beauty Parlour building, night view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Commercial</div><h4>Ananya Beauty Parlour</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="commercial">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/ananya-day-01.jpg" alt="Ananya Beauty Parlour and Trimurti Hair Salon building, day view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Commercial</div><h4>Ananya &amp; Trimurti Storefront</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="commercial visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/ananya-night-02.jpg" alt="Ananya Beauty Parlour and Trimurti Hair Salon angled night render" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Commercial &middot; 3D Visualization</div><h4>Ananya Night Elevation</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/maronis-night-01.jpg" alt="Maroni's House villa with rooftop pergola, night view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential</div><h4>Maroni's House &mdash; 14B</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/maronis-night-02.jpg" alt="Maroni's House villa, angled street view at night" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential</div><h4>Maroni's House &mdash; Street View</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/villa-finstrip-night-01.jpg" alt="Modern villa with vertical fin facade, night view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential</div><h4>Finstrip Residence</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/villa-finstrip-night-02.jpg" alt="Modern villa with vertical fin facade, angled night street view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential &middot; 3D Visualization</div><h4>Finstrip Residence &mdash; Angle</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/villa-day-01.jpg" alt="Contemporary villa with timber screen, day view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential</div><h4>Timber Screen Villa</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/villa-pink-day-01.jpg" alt="Residential villa render with warm facade panels and landscape planting" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential &middot; 3D Visualization</div><h4>Warm Panel Villa</h4><div class="proj-loc">Concept</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/phuke-day-01.jpg" alt="Mr. Phuke and Family residence, narrow plot facade with jali screen" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential</div><h4>Phuke Residence</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/kanjibhai-day-01.jpg" alt="Kanjibhai residence with jali screen facade and rooftop terrace" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential</div><h4>Kanjibhai Residence &mdash; 07</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="interior">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/interior-bedroom.jpg" alt="Warm minimal bedroom interior with sculptural feature wall" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Interior</div><h4>Stone Bedroom Suite</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="interior visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/ananya-night-02.jpg" alt="Visualization reel still from Ananya Beauty Parlour night render" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Video &middot; 3D Visualization</div><h4>Studio Reel Frame</h4><div class="proj-loc">Rendered Walkthrough</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="interior visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/interior-bedroom-wood-panel.jpg" alt="Luxury bedroom interior with geometric wood panel feature wall, warm neutrals" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Interior &middot; 3D Visualization</div><h4>Wood Panel Bedroom Suite</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="interior visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/interior-bedroom-serene.jpg" alt="Serene bedroom interior with sculptural wood panel wall and garden view window" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Interior &middot; 3D Visualization</div><h4>Serene Bedroom &mdash; Garden View</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="interior visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/interior-bedroom-botanical.jpg" alt="Bedroom interior with botanical mural wallpaper and pendant globe lighting" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Interior &middot; 3D Visualization</div><h4>Botanical Bedroom Suite</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/villa-tropical-day-01.jpg" alt="Modern residential villa with timber slat facade and tropical greenery, day view" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential &middot; 3D Visualization</div><h4>Tropical Timber Villa</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="residential visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/villa-021-dusk-01.jpg" alt="Contemporary residence No. 021 at dusk with timber fin facade and lush landscaping" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">Residential &middot; 3D Visualization</div><h4>Residence 021 &mdash; Dusk</h4><div class="proj-loc">Sambhajinagar</div></div>
+        </div>
+        <div class="gallery-item proj-card" data-cat="visualization">
+          <span class="corner-mark tl"></span><span class="corner-mark br"></span>
+          <img src="assets/concept-model-01.jpg" alt="Architectural 3D massing model showing multi-storey mixed-use building concept" loading="lazy">
+          <div class="proj-overlay"><div class="proj-tag">3D Visualization &middot; Concept</div><h4>Mixed-Use Building Concept</h4><div class="proj-loc">Concept Model</div></div>
+        </div>
+      </div>
+
+      <!-- BEFORE / AFTER -->
+      <div class="ba-wrap">
+        <div class="section-head reveal" style="margin-bottom:2rem;">
+          <div>
+            <div class="eyebrow">Render Showcase</div>
+            <h2>From day view to night mood.</h2>
+          </div>
+          <p>Drag the slider to compare daylight facade clarity with the illuminated night composition.</p>
+        </div>
+        <div class="ba-slider reveal" id="baSlider">
+          <span class="ba-label left">Day View</span>
+          <span class="ba-label right">Night View</span>
+          <img src="assets/ananya-day-01.jpg" alt="Ananya Beauty Parlour daylight facade render" class="ba-before">
+          <div class="ba-after" id="baAfter">
+            <img src="assets/ananya-night-02.jpg" alt="Ananya Beauty Parlour illuminated night facade render" style="--bw:200%;">
+          </div>
+          <div class="ba-handle" id="baHandle"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================ -->
+<!-- ============ CONTACT PAGE ============ -->
+<!-- ============================================================ -->
+<div class="page" id="page-contact">
+  <section class="page-hero-strip">
+    <div class="wrap">
+      <div class="eyebrow">Get In Touch</div>
+      <h1>Let's draw something that stands.</h1>
+      <p>Tell us about your site, your brief, or just an idea &mdash; we'll get back to you within one working day.</p>
+    </div>
+  </section>
+
+  <section style="border-bottom:none;">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <div class="info-row">
+            <div class="ic">Principal</div>
+            <div class="val">Rahul Sultane</div>
+          </div>
+          <div class="info-row">
+            <div class="ic">Phone</div>
+            <div class="val"><a href="tel:+917276101571">+91 72761 01571</a></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">Email</div>
+            <div class="val"><a href="mailto:rahulrsk11@gmail.com">rahulrsk11@gmail.com</a></div>
+          </div>
+          <div class="info-row">
+            <div class="ic">Studio</div>
+            <div class="val">Chhatrapati Sambhajinagar,<br>Maharashtra, India</div>
+          </div>
+
+          <div class="social-btn-grid">
+            <a href="tel:+917276101571" class="social-btn-card">
+              <div class="sbc-icon call-icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C9.6 21 3 14.4 3 6c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="sbc-info">
+                <span class="sbc-label">Phone</span>
+                <span class="sbc-handle">+91 72761 01571</span>
+              </div>
+              <span class="sbc-action">Call Now</span>
+            </a>
+            <a href="https://wa.me/917276101571?text=Hi%20Rahul%2C%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener" class="social-btn-card">
+              <div class="sbc-icon wa-icon">
+                <svg viewBox="0 0 32 32" fill="none"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-1.9c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3z" fill="currentColor"/><path d="M22.4 18.8c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.1-.2.3-.8 1.1-1 1.3-.2.2-.4.3-.7.1-.3-.2-1.3-.5-2.5-1.6-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.9-.8 2.1-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.4z" fill="var(--ink)"/></svg>
+              </div>
+              <div class="sbc-info">
+                <span class="sbc-label">WhatsApp</span>
+                <span class="sbc-handle">Chat with us</span>
+              </div>
+              <span class="sbc-action">Message</span>
+            </a>
+            <a href="https://www.instagram.com/fine_archh?igsh=b2Y2a2VzZmVkaHR4&utm_source=qr" target="_blank" rel="noopener" class="social-btn-card">
+              <div class="sbc-icon ig-icon">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
+              </div>
+              <div class="sbc-info">
+                <span class="sbc-label">Instagram</span>
+                <span class="sbc-handle">@fine_archh</span>
+              </div>
+              <span class="sbc-action">Follow</span>
+            </a>
+            <a href="https://www.linkedin.com/in/rahul-patil-876ba2289?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener" class="social-btn-card">
+              <div class="sbc-icon li-icon">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/><path d="M7 10v7M7 7.5v.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M11 17v-3a2.5 2.5 0 015 0v3M11 10v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="sbc-info">
+                <span class="sbc-label">LinkedIn</span>
+                <span class="sbc-handle">Rahul Patil</span>
+              </div>
+              <span class="sbc-action">Connect</span>
+            </a>
+          </div>
+
+          <div class="map-embed">
+            <iframe
+              src="https://www.google.com/maps?q=Chhatrapati%20Sambhajinagar%2C%20Maharashtra%2C%20India&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Studio location map">
+            </iframe>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <form class="form-card" id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact">
+            <p style="display:none"><label>Do not fill this out: <input name="bot-field"></label></p>
+            <div class="form-row">
+              <label for="cf-name">Full Name</label>
+              <input type="text" id="cf-name" name="name" required placeholder="Your name">
+            </div>
+            <div class="form-row">
+              <label for="cf-email">Email</label>
+              <input type="email" id="cf-email" name="email" required placeholder="you@email.com">
+            </div>
+            <div class="form-row">
+              <label for="cf-phone">Phone</label>
+              <input type="tel" id="cf-phone" name="phone" placeholder="+91 00000 00000">
+            </div>
+            <div class="form-row">
+              <label for="cf-service">Service Interested In</label>
+              <select id="cf-service" name="service">
+                <option>Architectural Design</option>
+                <option>Interior Design</option>
+                <option>3D Rendering</option>
+                <option>Working Drawings</option>
+                <option>Landscape Design</option>
+                <option>Not Sure Yet</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="cf-message">Project Brief</label>
+              <textarea id="cf-message" name="message" required placeholder="Tell us about your site, scope and timeline..."></textarea>
+            </div>
+            <button type="submit" class="form-submit">Send Enquiry</button>
+            <div class="form-note" id="formNote"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================ -->
+<!-- ============ FOOTER ============ -->
+<!-- ============================================================ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="brand"><span class="u-mark"><svg width="22" height="18" viewBox="0 0 56 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 2V22C6 32 13 40 22 40" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/><path d="M16 2V20C16 28 21 34 28 34" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/><path d="M50 2V22C50 32 43 40 34 40" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/><path d="M40 2V20C40 28 35 34 28 34" stroke="#C7A876" stroke-width="4.2" stroke-linecap="round"/></svg></span><span class="brand-text"><b>ULTRA UNLEASH</b><small>Studio</small></span></div>
+        <p>Architecture, interior design and visualization &mdash; engineered first, designed always, based in Chhatrapati Sambhajinagar, Maharashtra.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Studio</h5>
+          <a href="#" data-nav="home">Home</a>
+          <a href="#" data-nav="about">About</a>
+          <a href="#" data-nav="services">Services</a>
+          <a href="#" data-nav="projects">Projects</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="tel:+917276101571">+91 72761 01571</a>
+          <a href="mailto:rahulrsk11@gmail.com">rahulrsk11@gmail.com</a>
+          <span>Chhatrapati Sambhajinagar, MH</span>
+        </div>
+        <div class="footer-col">
+          <h5>Follow</h5>
+          <a href="https://www.instagram.com/fine_archh?igsh=b2Y2a2VzZmVkaHR4&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/rahul-patil-876ba2289?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://wa.me/917276101571?text=Hi%20Rahul%2C%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener">WhatsApp</a>
+          <a href="tel:+917276101571">Call Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Ultra Unleash Studio. All rights reserved.</span>
+      <span>Designed &amp; Engineered by Rahul Sultane</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ LOADER ============ */
+(function(){
+  const text = "ULTRA UNLEASH";
+  const mark = document.getElementById('loaderMark');
+  text.split('').forEach((ch,i)=>{
+    const span = document.createElement('span');
+    span.textContent = ch === ' ' ? '\u00A0' : ch;
+    span.style.animationDelay = (i*0.045)+'s';
+    mark.appendChild(span);
+  });
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{
+      document.getElementById('loader').classList.add('hidden');
+    }, 1500);
+  });
+  // fallback in case load already fired
+  setTimeout(()=>{ document.getElementById('loader').classList.add('hidden'); }, 3200);
+})();
+
+/* ============ NAV: scroll state + mobile toggle ============ */
+const siteNav = document.getElementById('siteNav');
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+
+window.addEventListener('scroll', ()=>{
+  siteNav.classList.toggle('scrolled', window.scrollY > 40);
+}, {passive:true});
+
+navToggle.addEventListener('click', ()=>{
+  navToggle.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+
+/* ============ PAGE ROUTER ============ */
+const pages = document.querySelectorAll('.page');
+function showPage(id){
+  pages.forEach(p => p.classList.toggle('active', p.id === 'page-'+id));
+  window.scrollTo({top:0, behavior:'instant' in document.documentElement.style ? 'instant' : 'auto'});
+  navLinks.classList.remove('open');
+  navToggle.classList.remove('open');
+  refreshReveal();
+}
+document.querySelectorAll('[data-nav]').forEach(el=>{
+  el.addEventListener('click', (e)=>{
+    e.preventDefault();
+    showPage(el.getAttribute('data-nav'));
+  });
+});
+
+/* ============ SCROLL REVEAL ============ */
+const revealEls = () => document.querySelectorAll('.reveal');
+let observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.15});
+function refreshReveal(){
+  revealEls().forEach(el=>{
+    if(!el.classList.contains('in')) observer.observe(el);
+  });
+}
+refreshReveal();
+
+/* ============ PROJECT FILTER ============ */
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.getAttribute('data-filter');
+    document.querySelectorAll('.gallery-item').forEach(item=>{
+      const cats = (item.getAttribute('data-cat') || '').split(' ');
+      item.classList.toggle('hide', f !== 'all' && !cats.includes(f));
+    });
+  });
+});
+
+/* ============ BEFORE / AFTER SLIDER ============ */
+(function(){
+  const slider = document.getElementById('baSlider');
+  const after = document.getElementById('baAfter');
+  const handle = document.getElementById('baHandle');
+  let dragging = false;
+
+  function setPos(x){
+    const rect = slider.getBoundingClientRect();
+    let pct = ((x - rect.left) / rect.width) * 100;
+    pct = Math.max(0, Math.min(100, pct));
+    after.style.width = pct + '%';
+    handle.style.left = pct + '%';
+  }
+  slider.addEventListener('mousedown', (e)=>{ dragging = true; setPos(e.clientX); });
+  window.addEventListener('mousemove', (e)=>{ if(dragging) setPos(e.clientX); });
+  window.addEventListener('mouseup', ()=> dragging = false);
+  slider.addEventListener('touchstart', (e)=>{ dragging = true; setPos(e.touches[0].clientX); });
+  slider.addEventListener('touchmove', (e)=>{ if(dragging) setPos(e.touches[0].clientX); });
+  window.addEventListener('touchend', ()=> dragging = false);
+})();
+
+/* ============ CONTACT FORM ============ */
+document.getElementById('contactForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const note = document.getElementById('formNote');
+  const btn = this.querySelector('.form-submit');
+
+  const formData = new FormData(this);
+  const name    = formData.get('name')    || '';
+  const email   = formData.get('email')   || '';
+  const phone   = formData.get('phone')   || '';
+  const service = formData.get('service') || '';
+  const message = formData.get('message') || '';
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  note.textContent = '';
+
+  try {
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString(),
+    });
+
+    if (res.ok) {
+      note.textContent = 'Enquiry sent — we will reach out shortly.';
+      note.style.color = 'var(--brass-bright)';
+      this.reset();
+
+      const waText = 'Hi Rahul, I’d like to enquire about your services.\n\n'
+        + 'Name: ' + name + '\n'
+        + 'Email: ' + email + '\n'
+        + 'Phone: ' + phone + '\n'
+        + 'Service: ' + service + '\n'
+        + 'Message: ' + message;
+      window.open('https://wa.me/917276101571?text=' + encodeURIComponent(waText), '_blank', 'noopener');
+    } else {
+      note.textContent = 'Something went wrong. Please email us directly at rahulrsk11@gmail.com.';
+      note.style.color = '#e05252';
+    }
+  } catch (_) {
+    note.textContent = 'Network error. Please email us directly at rahulrsk11@gmail.com.';
+    note.style.color = '#e05252';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Send Enquiry';
+});
+
+/* ============ HERO VIDEO: ensure autoplay on mobile interaction fallback ============ */
+(function(){
+  const vid = document.querySelector('.hero-canvas video');
+  if(!vid) return;
+  const tryPlay = () => vid.play().catch(()=>{});
+  tryPlay();
+  document.addEventListener('touchstart', tryPlay, {once:true});
+  document.addEventListener('click', tryPlay, {once:true});
+})();
+</script>
+
+</body>
+</html>
